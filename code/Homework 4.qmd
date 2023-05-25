@@ -1,0 +1,37 @@
+---
+title: "Homework 4"
+format: pdf
+author: "Victoria Yang"
+date: "May 25, 2023"
+---
+
+Link to github repository: https://github.com/v-yc/ENVS-193DS_homework-04_Yang-Victoria
+
+## 1. Setup
+
+Load in required packages.
+
+```{r libraries}
+
+library(tidyverse)
+library(here)
+library(janitor)
+library(ggeffects)
+library(performance)
+library(naniar)
+library(flextable)
+library(car)
+library(broom)
+library(corrplot)
+library(AICcmodavg)
+library(GGally)
+
+```
+
+Read in the data and organize files using the here package.
+
+```{r reading-data}
+
+fish <- read_csv(here("data", "knb-lter-ntl.6.34", "ntl6_v12.csv"))
+
+```
