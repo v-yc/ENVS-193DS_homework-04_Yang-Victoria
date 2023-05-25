@@ -67,7 +67,7 @@ gg_miss_var(fish)
 
 There are about 200 missing data points for the weight variable, which is significant because there are only 489 observations in this dataset. This would mean that about 41% of the data is missing.
 
-However, we do not know why these data points are missing because this is from an online data set. For our analysis, we will remove the NA values by subsetting the data.
+However, we do not know why these data points are missing because this is from an online data set. Additionally, there are still 290 observations left if we remove the missing data, which is a large sample size. As a result, I will remove the NA values by subsetting the data for this analysis because there will be enough data points left to make a good model.
 
 ```{r subset-drop-NA}
 
@@ -90,7 +90,7 @@ modelobject <- lm(weight ~ length, data = fish_subset)
 
 Check assumptions by plotting residual diagnostic plots.
 
-```{r check-assumptions}
+```{r check-assumptions-qualitatively}
 
 # display diagnostic plots in a 2x2 grid
 par(mfrow = c(2, 2))
@@ -99,9 +99,61 @@ par(mfrow = c(2, 2))
 plot(modelobject)
 
 ```
- Interpretation of diagnostic plots:
 
--   Residuals vs fitted plot:
--   Normal Q-Q plot:
--   Scale-location plot:
--   Residuals vs Leverage:
+Interpretation of diagnostic plots:
+
+-   Residuals vs fitted plot: The red line is mostly straight and the residuals are mostly evenly distributed about the dotted line. Consequently, I would say the residuals look mostly homoskedastic.
+-   Normal Q-Q plot: The majority of the points fall on the dotted line so I would say the residuals look mostly normally distributed.
+-   Scale-location plot: The data points are evenly distributed about the red line and the red line looks somewhat straight. Consequently, I would say that the residuals are homoskedastic.
+-   Residuals vs Leverage: There are 3 points labeled and one of them is outside the dotted line, which suggests that it might be an outlier that influences the model. Since only one data point is outside the dotted lines and I do not know where it came from, I think it would be safer to keep it in the model.
+
+## Create a summary table
+
+First, create a model summary to get the information of interest. The summary() function gives us the coefficients (slope and y-intercept) of the linear model, the standard error of the coefficients, multiple R2 (quantifies how well the independent variable predicts the dependent variable), and the p-value for the model fit.
+
+```{r summary-table}
+
+# store the model summary as an object
+model_summary <- summary(modelobject)
+model_summary
+
+```
+
+Then, create an ANOVA table and a summary statistics table to report the ANOVA results.
+
+```{r}
+
+# store the ANOVA table as an object
+model_squares <- anova(modelobject)
+model_squares
+
+# make the summary statistics table
+model_squares_table <- tidy(model_squares) %>% 
+  
+  # round the sum of squares and mean squares to 2 digits
+  mutate(across(sumsq:meansq, ~ round(.x, digits = 1))) %>% 
+  
+  # round the F-statistic to 1 digit
+  mutate(statistic = round(statistic, digits = 1)) %>% 
+  
+  # replace the small p values with < 0.001
+  mutate(p.value = case_when(p.value < 0.001 ~ "< 0.001")) %>% 
+  
+  # make the data frame a flextable object
+  flextable() %>% 
+  
+  # change header labels
+  set_header_labels(df = "Degrees of Freedom", 
+                    sumsq = "Sum of squares",
+                    meansq = "Mean squares",
+                    statistic = "F-statistic",
+                    p.value = "p-value")
+
+model_squares_table
+```
+
+The ANOVA has information on the degrees of freedom, f-statistic, and p-value of the model like the summary() object. However, it also includes information on the sum of squares and mean squares values, which is useful for understanding where the F-statistic, p-value and R2 values from the summary() object come from.
+
+Results:
+
+Based on our observations, fish length is a good predictor of fish weight for trout perch across all sample years (F1,288 = 1280.8, p \< 0.001, R2 = 0.8). For each 1 mm increase in fish length, we expect a 0.2 g increase in fish weight.
