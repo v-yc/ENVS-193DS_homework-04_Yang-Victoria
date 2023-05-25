@@ -77,3 +77,31 @@ fish_subset <- fish %>%
   drop_na(length, weight)
 
 ```
+
+## 3. Create a linear model and check assumptions
+
+Creating a linear model where fish length is the predictor variable and fish weight is the response variable:
+
+```{r create-linear-model}
+
+modelobject <- lm(weight ~ length, data = fish_subset)
+
+```
+
+Check assumptions by plotting residual diagnostic plots.
+
+```{r check-assumptions}
+
+# display diagnostic plots in a 2x2 grid
+par(mfrow = c(2, 2))
+
+# plot diagnostic plots to check linear model assumptions
+plot(modelobject)
+
+```
+ Interpretation of diagnostic plots:
+
+-   Residuals vs fitted plot:
+-   Normal Q-Q plot:
+-   Scale-location plot:
+-   Residuals vs Leverage:
