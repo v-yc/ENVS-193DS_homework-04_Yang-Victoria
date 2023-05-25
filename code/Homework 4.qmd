@@ -48,8 +48,8 @@ fish <- read_csv(here("data", "knb-lter-ntl.6.34", "ntl6_v12.csv")) %>%
 
 In mathematical terms:
 
--   The null hypothesis is that the slope of the linear model (where fish length is the predictor variable and fish weight is the response variable) is 0.
--   The alternative hypothesis is that the slope of the linear model (where fish length is the predictor variable and fish weight is the response variable) is not 0.
+-   The null hypothesis is that the slope of the linear model is 0 ($\beta_1$ = 0).
+-   The alternative hypothesis is that the slope of the linear model is not 0 ($\beta_1$ $\neq$ 0).
 
 In biological terms,
 
@@ -65,7 +65,7 @@ gg_miss_var(fish)
 
 ```
 
-There are about 200 missing data points for the weight variable, which is significant because there are only 489 observations in this dataset. This would mean that about 41% of the data is missing.
+Figure 1: There are about 200 missing data points for the weight variable, which is significant because there are only 489 observations in this dataset. This would mean that about 41% of the data is missing.
 
 However, we do not know why these data points are missing because this is from an online data set. Additionally, there are still 290 observations left if we remove the missing data, which is a large sample size. As a result, I will remove the NA values by subsetting the data for this analysis because there will be enough data points left to make a good model.
 
@@ -148,7 +148,7 @@ model_squares_table <- tidy(model_squares) %>%
                     meansq = "Mean squares",
                     statistic = "F-statistic",
                     p.value = "p-value")
-
+  
 model_squares_table
 ```
 
@@ -156,4 +156,42 @@ The ANOVA has information on the degrees of freedom, f-statistic, and p-value of
 
 Results:
 
-Based on our observations, fish length is a good predictor of fish weight for trout perch across all sample years (F1,288 = 1280.8, p \< 0.001, R2 = 0.8). For each 1 mm increase in fish length, we expect a 0.2 g increase in fish weight.
+A linear model and F-test with a significance level of 0.05 was used to test the null hypothesis that there is no significant relationship between fish length and fish weight for trout perch. Based on our data with a sample size of 290 observations, fish length is a good predictor of fish weight for trout perch across all sample years (F1,288 = 1280.8, p \< 0.001, R2 = 0.8). The equation of the linear model is y = -11.7 + 0.2x so for each 1 mm increase in fish length, we expect a 0.2 g increase in fish weight.
+
+## Visualize model
+
+```{r}
+
+# extract model predictions
+predictions <- ggpredict(modelobject, terms = "length")
+
+# visualize the model and include predictions and confidence intervals
+
+plot_predictions <- ggplot(data = fish_subset, aes(x = length, y = weight)) +
+  
+  # plot the underlying data
+  geom_point() +
+  
+  # plot the predictions
+  geom_line(data = predictions, 
+            aes(x = x, y = predicted), 
+            color = "red",
+            linewidth = 1) +
+  
+  # plot the 95% confidence interval
+  geom_ribbon(data = predictions, 
+              aes(x = x, y = predicted, ymin = conf.low, ymax = conf.high),
+              alpha = 0.2) +
+  
+  # add a theme
+  theme_gray() +
+  
+  # add labels
+  labs(x = "Trout Perch Length (mm)",
+       y = "Trout Perch Weight (g)")
+
+plot_predictions
+
+```
+
+Figure 2: Linear model of trout perch weight as a function of trout perch length. The black dots represent individual data points, the red line represents the linear model, and the gray area around the line represents a 95% confidence interval.
