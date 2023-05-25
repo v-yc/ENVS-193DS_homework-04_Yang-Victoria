@@ -12,7 +12,7 @@ There are 5 files in this package
 
 1. "knb-lter-ntl.6.34.report.xml" checks document validity.
 2. "knb-lter-ntl.6.34.txt" contains detailed metadata on methods, variables, and dataset.
-3. "knb-lter-ntl.6.34.xml" same as "knb-lter-ntl.6.34.txt" but in .xml format.
+3. "knb-lter-ntl.6.34.xml" is the same as "knb-lter-ntl.6.34.txt" but in .xml format.
 4. "manifest.txt" is the manifest file for the data package.
 5. "ntl6_v12.csv" contains the sample data with 15 variables and 349299 observations. The variables include lake, year, sample date, gear type, species name, sample type, depth, replicate number, individual ID, length, weight, sex, fish part, spseq, and flag for each observation of fish.
 
