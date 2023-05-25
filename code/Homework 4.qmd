@@ -64,7 +64,6 @@ Visualize the missing data:
 gg_miss_var(fish)
 
 ```
-
 Figure 1: There are about 200 missing data points for the weight variable, which is significant because there are only 489 observations in this dataset. This would mean that about 41% of the data is missing.
 
 However, we do not know why these data points are missing because this is from an online data set. Additionally, there are still 290 observations left if we remove the missing data, which is a large sample size. As a result, I will remove the NA values by subsetting the data for this analysis because there will be enough data points left to make a good model.
@@ -193,5 +192,4 @@ plot_predictions <- ggplot(data = fish_subset, aes(x = length, y = weight)) +
 plot_predictions
 
 ```
-
 Figure 2: Linear model of trout perch weight as a function of trout perch length. The black dots represent individual data points, the red line represents the linear model, and the gray area around the line represents a 95% confidence interval.
