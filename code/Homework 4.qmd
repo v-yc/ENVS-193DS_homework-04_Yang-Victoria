@@ -53,9 +53,9 @@ In mathematical terms:
 
 In biological terms,
 
--   The null hypothesis is that fish length is not a good predictor of fish weight for trout perch.
+-   The null hypothesis is that fish length is not a predictor of fish weight for trout perch.
 
--   The alternative hypothesis is that fish length is a good predictor of fish weight for trout perch.
+-   The alternative hypothesis is that fish length is a predictor of fish weight for trout perch.
 
 Visualize the missing data:
 
